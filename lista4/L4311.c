@@ -31,7 +31,6 @@ void* entrega () {
             n_pacotes = n_pacotes - capacidade;   // o numero total de pacotes restantes eh diminuido pelo numero de pacotes que acabaram de ser entregues
             sleep(2);                             // tempo de duracao da viagem
             printf("Retornando das entregas e pronto para atender mais clientes\n");
-            // sleep(1);
         }
         pthread_cond_signal(&caminhonete);    // sinaliza a caminhonete ja chegou ou ainda esta na agencia
         pthread_mutex_unlock(&pacote);
@@ -54,7 +53,6 @@ void* solicitacao (void* id) {
                 n_pacotes--;      // cliente solicita entrega de um pacote
                 carregamento++;   // caminhonete recebe pacote solicitado pelo cliente
                 printf("Cliente %ld solicitou a entrega de um pacote. Dele, restam %d\n", tid+1, n_pacotes);
-                // sleep(1);
                 pthread_cond_wait(&caminhonete, &pacote);   // cliente espera caminhonete sair para entrega
             }
             cliente_id++;   // cliente vai para o final da fila
@@ -78,10 +76,10 @@ int main () {
     pthread_t cliente[ n_clientes ];
     pthread_cond_init(&caminhonete, NULL);
     pthread_mutex_init(&pacote, NULL);
+    pthread_create(&funcionario, NULL, entrega, NULL);
     for (long int i=0; i < n_clientes; i++) {
         pthread_create(&cliente[i], NULL, solicitacao, (void*)i);
-    } sleep(2);
-    pthread_create(&funcionario, NULL, entrega, NULL);
+    }
 
     // espera a finalizacao das entregas
     for (long int i=0; i < n_clientes; i++) {
