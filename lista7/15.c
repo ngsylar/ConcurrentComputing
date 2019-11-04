@@ -12,9 +12,10 @@
 long long int somavalores (int *valores, int n) {
     long long int soma = 0;
     int mt;
-    omp_set_num_threads (NT);
 
     n = n / NT;
+    omp_set_num_threads (NT);
+    
     #pragma omp parallel
     {
         long long int soma_parcial = 0;
